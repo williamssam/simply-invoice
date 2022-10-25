@@ -1,4 +1,11 @@
 const express = require('express')
+const {
+	getAllClients,
+	addNewClient,
+	getOneClient,
+	deleteClient,
+	updateClient,
+} = require('../controller/clientsController')
 
 const router = express.Router()
 
@@ -9,8 +16,10 @@ const router = express.Router()
   - get single client* (might handle this in the frontend)
 */
 
-router.get('/all-clients', (req, res) => {
-	const { name, email, phone_number, company_name, compnay_address } = req.body
-})
+router.get('', getAllClients)
+router.post('', addNewClient)
+router.get('/:id', getOneClient)
+router.delete('/', deleteClient)
+router.patch('/:id', updateClient)
 
 module.exports = router

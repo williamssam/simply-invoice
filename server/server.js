@@ -15,15 +15,17 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.use('/api/clients', clientsRoutes)
-app.use('/api/invoice', invoiceRoutes)
+app.use('/api/v1/clients', clientsRoutes)
+app.use('/api/v1/invoices', invoiceRoutes)
 
 // start server
-mongoose.connect(process.env.MONGO_URI).then(() => {
-	app.listen(process.env.PORT, () => {
-		console.log(
-			`🎉 Server connected to DB and started on port ${process.env.PORT}`
-		)
-	}),
-		err => console.error(err)
-})
+mongoose
+	.connect(process.env.MONGO_URI)
+	.then(() => {
+		app.listen(process.env.PORT, () => {
+			console.log(
+				`🎉 Server connected to DB and started on port ${process.env.PORT}`
+			)
+		})
+	})
+	.catch(err => console.error(err))

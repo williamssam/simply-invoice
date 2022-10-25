@@ -1,9 +1,16 @@
 const express = require('express')
+const {
+	createNewInvoice,
+	getAllInvoice,
+	getClientInvoice,
+	deleteInvoice,
+} = require('../controller/invoiceController')
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-	res.status(200).json({ msg: 'Get all invoices' })
-})
+router.post('', createNewInvoice)
+router.get('', getAllInvoice)
+router.get('/:id', getClientInvoice)
+router.delete('/:id', deleteInvoice)
 
 module.exports = router
