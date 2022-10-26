@@ -8,9 +8,9 @@ const {
 
 const router = express.Router()
 
-router.post('', createNewInvoice)
+router.post('/', createNewInvoice)
 router.get('', getAllInvoice)
-router.get('/:id', getClientInvoice)
-router.delete('/:id', deleteInvoice)
+router.get('/', getClientInvoice)
+router.delete('/', deleteInvoice)
 
 module.exports = router

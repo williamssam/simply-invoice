@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Clients = require('../model/clientsModel')
+const { validationResult } = require('express-validator')
 
 const getAllClients = async (req, res) => {
 	try {
@@ -42,30 +43,33 @@ const getOneClient = async (req, res) => {
 }
 
 const addNewClient = async (req, res) => {
-	const { name, email, phoneNumber, companyName, companyAddress } = req.body
+	const { name, email, phoneNumber, organisation, organisationAddress } =
+		req.body
+
+	// validate error with "express-validator"
+	let errors = validationResult(req)
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() })
+	}
 
 	try {
-		if (!name) {
-			throw Error('Client name is compulsory')
+		// check existing company name
+		const organisationExists = await Clients.findOne({ organisation })
+		if (organisationExists) {
+			throw Error('Organization already exists 😔')
 		}
-		if (!email) {
-			throw Error('Client email address is compulsory')
+		// check existing client email address
+		const emailExists = await Clients.findOne({ email })
+		if (emailExists) {
+			throw Error('Organization already exists 😔')
 		}
-		if (!phoneNumber) {
-			throw Error('Client phone number is compulsory')
-		}
-		if (!companyName) {
-			throw Error('Client company name is compulsory')
-		}
-		if (!companyAddress) {
-			throw Error('Client company address is compulsory')
-		}
+
 		const client = await Clients.create({
 			name,
 			email,
 			phoneNumber,
-			companyName,
-			companyAddress,
+			organisation,
+			organisationAddress,
 		})
 		res.status(200).json({
 			status: true,

@@ -36,27 +36,29 @@ const getAllInvoice = async (req, res) => {
 }
 
 const getClientInvoice = async (req, res) => {
-	// const { clientId } = req.params
-	// try {
-	// 	const clientInvoice = await Invoices.find({
-	// 		clientId,
-	// 	})
-	// 	res.status(200).json({
-	// 		status: true,
-	// 		message: 'All invoice for the client retrieved successfully 🎉!',
-	// 		data: clientInvoice,
-	// 	})
-	// } catch (error) {
-	// 	res.status(400).json({
-	// 		status: false,
-	// 		message: 'Error retrieving invoice!',
-	// 		err: error.message,
-	// 	})
-	// }
+	const { client_id } = req.body
+	try {
+		const clientInvoice = await Invoices.find({
+			clientId: {
+				$in: [client_id],
+			},
+		})
+		res.status(200).json({
+			status: true,
+			message: 'All invoice for the client retrieved successfully 🎉!',
+			data: clientInvoice,
+		})
+	} catch (error) {
+		res.status(400).json({
+			status: false,
+			message: 'Error retrieving invoice!',
+			err: error.message,
+		})
+	}
 }
 
 const deleteInvoice = async (req, res) => {
-	const { id } = req.params
+	const { id } = req.body
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(404).json({ error: 'No such invoice' })
