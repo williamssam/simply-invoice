@@ -7,7 +7,7 @@ const Home: NextPage = () => {
 			<Head>
 				<title>Simply Invoice - Home</title>
 			</Head>
-			<header className='text-neutral absolute top-0 z-50'>
+			<header className='text-neutral absolute top-0 z-50 font-figtree'>
 				<nav className='flex items-center justify-between w-screen px-16 pt-6'>
 					<h1 className='font-sora text-xl'>SimpInv</h1>
 
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 					</ul>
 				</nav>
 			</header>
-			<main className='relative flex items-center justify-center flex-col bg-main-black h-screen'>
+			<main className='relative flex items-center justify-center flex-col bg-main-black h-screen font-figtree'>
 				<a
 					href='https://williamssam.netlify.app/'
 					target='_blank'
@@ -37,7 +37,7 @@ const Home: NextPage = () => {
 				<h1 className='font-sora text-5xl text-neutral pt-2'>
 					SimpInv, Simply Invoice
 				</h1>
-				<p className='text-[#9a9aad] w-[500px] pt-4 text-center leading-relaxed text-sm'>
+				<p className='text-dark-clr w-[500px] pt-4 text-center leading-relaxed text-sm'>
 					Invoicing app for freelancers and small business. Send Invoice to
 					clients and receive payment automatically.{' '}
 					<strong>Is that not cool? 🤗🤩</strong>

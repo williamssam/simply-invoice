@@ -31,7 +31,7 @@ class MyDocument extends Document {
 						rel='stylesheet'
 					/>
 				</Head>
-				<body className='font-Figtree'>
+				<body>
 					<Main />
 					<NextScript />
 				</body>

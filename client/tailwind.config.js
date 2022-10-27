@@ -15,6 +15,8 @@ module.exports = {
 				'main-black': '#15151c',
 				neutral: '#fafafa',
 				'black-btn': '#30303d',
+				'dark-clr': '#9a9999',
+				// text-[]
 			},
 		},
 	},
