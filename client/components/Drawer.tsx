@@ -1,18 +1,76 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { Group } from "../assets/icons/Group";
 import { Mail } from "../assets/icons/Mail";
 import Map from "../assets/icons/Map";
 import { Phone } from "../assets/icons/Phone";
 import { User } from "../assets/icons/User";
 import { Action } from "../models/types";
-import { TextInput } from "./TextInput";
 
 interface DrawerProps {
   openDrawer: boolean;
   dispatch: Dispatch<Action>;
 }
 
+interface AddNewCustomerType {
+  name: string;
+  organization: string;
+  organizationAddress: string;
+  emailAddress: string;
+  phoneNumber: string;
+}
+
+const schema = z.object({
+  name: z
+    .string({
+      required_error: "Name is required",
+      invalid_type_error: "Name must be a string",
+    })
+    .min(2, { message: "Name must be at least 2 characters long" })
+    .trim(),
+  organization: z
+    .string({ required_error: "Organization name is requied" })
+    .min(2, { message: "Organization must be at least 2 characters long" })
+    .trim(),
+  organizationAddress: z
+    .string({ required_error: "Organization Address is required" })
+    .min(2, {
+      message: "Organization address must be at least 2 characters long",
+    })
+    .trim(),
+  emailAddress: z
+    .string({ required_error: "Email Address is required" })
+    .min(2, { message: "Email address must be at least 2 characters long" })
+    .trim(),
+  phoneNumber: z
+    .string({ required_error: "Phone Number is required" })
+    .min(2, { message: "Phone number must be at least 2 characters long" })
+    .trim(),
+});
+
 export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<AddNewCustomerType>({
+    defaultValues: {
+      name: "",
+      organization: "",
+      organizationAddress: "",
+      emailAddress: "",
+      phoneNumber: "",
+    },
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: AddNewCustomerType) => {
+    console.log(data);
+  };
+  console.log(errors);
+
   return (
     <>
       <div className="flex items-center">
@@ -32,16 +90,108 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
             className="mt-6 flex flex-col gap-5"
             autoComplete="off"
             autoCorrect="off"
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <TextInput label="Name" type="text" icon={<User />} />
-            <TextInput label="Organization" type="text" icon={<Group />} />
-            <TextInput
-              label="Organization Address"
-              type="text"
-              icon={<Map />}
-            />
-            <TextInput label="Email Address" type="email" icon={<Mail />} />
-            <TextInput label="Phone Number" type="text" icon={<Phone />} />
+            <div>
+              <label className="flex items-center text-sm text-gray-700">
+                <span className="scale-75 text-gray-400">
+                  <User />
+                </span>
+                <span>Name</span>
+              </label>
+              <input
+                type="text"
+                className={`mt-2 w-full rounded-md bg-gray-200 py-4 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
+                  errors.name && "ring-2 ring-red-600"
+                }`}
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <p className="mt-1 text-[10px] font-bold text-red-700">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="flex items-center text-sm text-gray-700">
+                <span className="scale-75 text-gray-400">
+                  <Group />
+                </span>
+                <span>Organization</span>
+              </label>
+              <input
+                type="text"
+                className={`mt-2 w-full rounded-md bg-gray-200 py-4 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
+                  errors.name && "ring-2 ring-red-600"
+                }`}
+                {...register("organization", { required: true })}
+              />
+              {errors.organization && (
+                <p className="mt-1 text-[10px] font-bold text-red-700">
+                  {errors.organization.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="flex items-center text-sm text-gray-700">
+                <span className="scale-75 text-gray-400">
+                  <Map />
+                </span>
+                <span>Organization Address</span>
+              </label>
+              <input
+                type="text"
+                className={`mt-2 w-full rounded-md bg-gray-200 py-4 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
+                  errors.name && "ring-2 ring-red-600"
+                }`}
+                {...register("organizationAddress", { required: true })}
+              />
+              {errors.organizationAddress && (
+                <p className="mt-1 text-[10px] font-bold text-red-700">
+                  {errors.organizationAddress.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="flex items-center text-sm text-gray-700">
+                <span className="scale-75 text-gray-400">
+                  <Mail />
+                </span>
+                <span>Email Address</span>
+              </label>
+              <input
+                type="email"
+                className={`mt-2 w-full rounded-md bg-gray-200 py-4 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
+                  errors.name && "ring-2 ring-red-600"
+                }`}
+                {...register("emailAddress", { required: true })}
+              />
+              {errors.emailAddress && (
+                <p className="mt-1 text-[10px] font-bold text-red-700">
+                  {errors.emailAddress.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="flex items-center text-sm text-gray-700">
+                <span className="scale-75 text-gray-400">
+                  <Phone />
+                </span>
+                <span>Phone Number</span>
+              </label>
+              <input
+                type="email"
+                className={`mt-2 w-full rounded-md bg-gray-200 py-4 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
+                  errors.name && "ring-2 ring-red-600"
+                }`}
+                {...register("phoneNumber", { required: true })}
+              />
+              {errors.phoneNumber && (
+                <p className="mt-1 text-[10px] font-bold text-red-700">
+                  {errors.phoneNumber.message}
+                </p>
+              )}
+            </div>
 
             <div className="mt-3">
               <button

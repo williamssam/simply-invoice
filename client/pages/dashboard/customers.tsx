@@ -1,5 +1,7 @@
 import Head from "next/head";
+import Link from "next/link";
 import { ReactElement, useReducer } from "react";
+import { ArrowRight } from "../../assets/icons/ArrowRight";
 import Delete from "../../assets/icons/Delete";
 import Edit from "../../assets/icons/Edit";
 import { UserAdd } from "../../assets/icons/UserAdd";
@@ -101,9 +103,17 @@ const Customers: NextPageWithLayout = () => {
                     <Delete />
                     <span className="sr-only">Delete Customer</span>
                   </button>
-                  <button className="rounded bg-main-black py-1 px-4 text-xs text-neutral active:scale-95">
-                    New Invoice
-                  </button>
+                  <Link href="/dashboard/invoices">
+                    <a className="flex rounded bg-main-black py-1 px-4 text-xs text-neutral active:scale-95">
+                      New Invoice
+                    </a>
+                  </Link>
+                  <Link href="/dashboard/customers/customer">
+                    <a className="ml-3 block rounded py-1 px-2 text-main-black transition-colors hover:bg-main-black hover:text-neutral">
+                      <ArrowRight />
+                      <span className="sr-only">More details</span>
+                    </a>
+                  </Link>
                 </div>
               </li>
             </ul>
