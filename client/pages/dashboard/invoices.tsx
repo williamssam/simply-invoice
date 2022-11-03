@@ -7,6 +7,7 @@ import { PaperPlane } from "../../assets/icons/PaperPlane";
 import { Print } from "../../assets/icons/Print";
 import { DashboardLayout } from "../../components/DashboardLayout";
 import { Invoice } from "../../components/Invoice";
+import { InvoiceSettings } from "../../components/InvoiceSettings";
 import { NextPageWithLayout } from "../_app";
 
 const Invoices: NextPageWithLayout = () => {
@@ -24,12 +25,10 @@ const Invoices: NextPageWithLayout = () => {
           <h2 className="pt-1 font-sora text-4xl">Invoices</h2>
         </header>
 
-        <div className="mt-6 grid grid-cols-5 gap-10">
+        <div className="mt-6 grid grid-cols-5 gap-8">
           <Invoice />
 
-          <div className="col-span-1">
-            <h2>invoice 001</h2>
-          </div>
+          <InvoiceSettings />
         </div>
 
         {/* footer btns */}

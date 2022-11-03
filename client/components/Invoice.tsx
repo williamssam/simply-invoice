@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Disk } from "../assets/icons/Disk";
-import Edit from "../assets/icons/Edit";
 
 export const Invoice = () => {
-  const [toggleEdit, setToggleEdit] = useState(true);
-  const [toggleFrom, setToggleFrom] = useState(true);
-
   const [taxDiscount, setTaxDiscount] = useState({
     discount: false,
     tax: false,
@@ -26,7 +21,7 @@ export const Invoice = () => {
           <input
             type="text"
             defaultValue="SM005"
-            className="rounded bg-gray-200 p-2 font-figtree font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-main-black"
+            className="w-32 rounded bg-gray-200 py-1 px-2 font-figtree font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-main-black"
             {...register("invoice-no", { required: true })}
           />
         </h3>
@@ -55,49 +50,31 @@ export const Invoice = () => {
       {/* Biller and Billed Details */}
       <div className="mt-5 flex items-center justify-between gap-20">
         <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold uppercase text-gray-400">From:</h3>
-            <button
-              type="button"
-              className="text-xs"
-              onClick={() => setToggleFrom(!toggleFrom)}
-              title={toggleFrom ? "Edit" : "Save"}
-            >
-              {toggleFrom ? <Edit /> : <Disk />}
-            </button>
-          </div>
+          <h3 className="text-sm font-bold uppercase text-gray-400">From:</h3>
 
           {/* if editing */}
-          <div
-            className={`mt-2 flex flex-col ${
-              toggleFrom ? "gap-0" : "gap-[5px]"
-            } text-sm`}
-          >
+          <div className="mt-2 flex flex-col gap-[5px] text-sm">
             <input
               type="text"
-              disabled={toggleFrom}
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Name"
               {...register("sender-name", { required: true })}
             />
             <input
               type="email"
-              disabled={toggleFrom}
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Email Address"
               {...register("sender-email", { required: true })}
             />
             <input
               type="text"
-              disabled={toggleFrom}
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Organization Name"
               {...register("sender-organization-name", { required: true })}
             />
             <input
               type="text"
-              disabled={toggleFrom}
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Organization Address"
               {...register("sender-organization-address", { required: true })}
             />
@@ -105,50 +82,36 @@ export const Invoice = () => {
         </div>
 
         <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              onClick={() => setToggleEdit(!toggleEdit)}
-              className="text-xs"
-              title={toggleEdit ? "Edit" : "Save"}
-            >
-              {toggleEdit ? <Edit /> : <Disk />}
-            </button>
-            <h3 className="text-sm font-bold uppercase text-gray-400">
-              Bill To:
-            </h3>
-          </div>
+          <h3 className="text-right text-sm font-bold uppercase text-gray-400">
+            Billed To:
+          </h3>
 
-          <div
-            className={`mt-2 flex flex-col ${
-              toggleEdit ? "gap-0" : "gap-[5px]"
-            } text-sm`}
-          >
+          <div className="mt-2 flex flex-col gap-[5px] text-sm">
             <input
               type="text"
-              disabled={toggleEdit}
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              disabled
+              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Name"
               {...register("receiver-name", { required: true })}
             />
             <input
               type="email"
-              disabled={toggleEdit}
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              disabled
+              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Email Address"
               {...register("receiver-email", { required: true })}
             />
             <input
               type="text"
-              disabled={toggleEdit}
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              disabled
+              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Organization Name"
               {...register("receiver-organization-name", { required: true })}
             />
             <input
               type="text"
-              disabled={toggleEdit}
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+              disabled
+              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
               placeholder="Organization Address"
               {...register("receiver-organization-address", { required: true })}
             />
@@ -170,7 +133,7 @@ export const Invoice = () => {
             <input
               type="text"
               autoComplete="off"
-              // disabled={toggleFrom}
+              // disabled
               className="flex-1 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
               placeholder="Description"
               {...register("description", { required: true })}
@@ -178,7 +141,6 @@ export const Invoice = () => {
             <input
               type="number"
               autoComplete="off"
-              // disabled={toggleFrom}
               className="w-28 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
               placeholder="Rate"
               {...register("rate", { required: true })}

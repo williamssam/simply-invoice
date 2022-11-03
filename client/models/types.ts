@@ -6,3 +6,11 @@ export interface initialStateType {
 export interface Action {
   type: "toggle-drawer" | "toggle-modal";
 }
+
+export interface CustomerType {
+  name: string;
+  organization: string;
+  organizationAddress: string;
+  emailAddress: string;
+  phoneNumber: string;
+}
