@@ -18,7 +18,7 @@ export const Modal = ({ openModal, dispatch, id: _id }: ModalProps) => {
     mutationFn: deleteCustomer,
     onSuccess: () => {
       dispatch({ type: "toggle-modal" });
-      toast("Customer deleted succesfully!");
+      toast.success("Customer deleted succesfully!");
       return queryClient.invalidateQueries(["clients"]);
     },
     onError: () => {
@@ -64,7 +64,7 @@ export const Modal = ({ openModal, dispatch, id: _id }: ModalProps) => {
           <div className="flex items-center justify-center gap-6">
             <button
               disabled={isLoading}
-              // onClick={() => mutate({id: _id})}
+              onClick={() => mutate({ id: _id })}
               type="button"
               className="rounded bg-red-700 py-[10px] px-8 text-neutral transition-colors hover:bg-red-800 active:scale-95 disabled:cursor-not-allowed disabled:bg-gray-300"
             >

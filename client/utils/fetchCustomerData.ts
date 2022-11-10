@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import type { Customer, Customers, CustomerType } from "../models/types";
+import type { Customers, CustomerType } from "../models/types";
 
 const instance: AxiosInstance = axios.create({
   baseURL: "http://localhost:4000/api/v1/",
@@ -18,9 +18,11 @@ export const addNewCustomer = async (customer: CustomerType) => {
   return resp?.data;
 };
 
-type CustomerId = Pick<Customer, "_id">;
-
-export const deleteCustomer = async (customer: CustomerId) => {
-  const resp = await instance.delete("clients");
+export const deleteCustomer = async ({ id }: { id: string }) => {
+  const resp = await instance.delete("clients", {
+    data: {
+      id,
+    },
+  });
   return resp?.data;
 };

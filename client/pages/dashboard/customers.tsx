@@ -50,6 +50,8 @@ const Customers: NextPageWithLayout = () => {
   // TODO: check if user has internet connection and show a toast
   // TODO: check if error exists and show a toast
 
+  console.log("customers", customers);
+
   return (
     <>
       <Head>
@@ -92,54 +94,60 @@ const Customers: NextPageWithLayout = () => {
 
           <ul className="mt-2 flex flex-col gap-3">
             {isLoading && <li>Loading....</li>}
-            {customers?.data.map((customer) => (
-              <>
-                <li
-                  className="relative grid grid-cols-5 gap-2 rounded bg-neutral py-2 px-6 text-other-black"
-                  key={customer?._id}
-                >
-                  <h4>{customer?.name}</h4>
-                  <p>{customer?.organization}</p>
-                  <p>{customer?.email}</p>
-                  <p className="justify-self-end">{customer?.phoneNumber}</p>
-                  <div className="flex items-center gap-2 justify-self-end">
-                    <button
-                      onClick={() => dispatch({ type: "toggle-drawer" })}
-                      className="text-blue-600 transition-colors hover:text-blue-800 active:scale-95"
-                      title="Edit Customer"
-                    >
-                      <Edit />
-                      <span className="sr-only">Edit Customer Details</span>
-                    </button>
-                    <button
-                      className="text-red-600 transition-colors hover:text-red-800 active:scale-95"
-                      title="Delete Customer"
-                      onClick={() => dispatch({ type: "toggle-modal" })}
-                    >
-                      <Delete />
-                      <span className="sr-only">Delete Customer</span>
-                    </button>
-                    <Link href="/dashboard/invoices">
-                      <a className="flex rounded bg-main-black py-1 px-4 text-xs text-neutral active:scale-95">
-                        New Invoice
-                      </a>
-                    </Link>
-                    <Link href="/dashboard/customers/customer">
-                      <a className="ml-3 block rounded py-1 px-2 text-main-black transition-colors hover:bg-main-black hover:text-neutral">
-                        <ArrowRight />
-                        <span className="sr-only">More details</span>
-                      </a>
-                    </Link>
-                  </div>
-                </li>
-                {/* weird might find beta way to resolve this */}
-                <Modal
-                  openModal={openModal}
-                  dispatch={dispatch}
-                  id={customer?._id}
-                />
-              </>
-            ))}
+            {customers!?.data.length > 0 ? (
+              customers?.data.map((customer) => (
+                <>
+                  <li
+                    className="relative grid grid-cols-5 gap-2 rounded bg-neutral py-2 px-6 text-other-black"
+                    key={customer?._id}
+                  >
+                    <h4>{customer?.name}</h4>
+                    <p>{customer?.organization}</p>
+                    <p>{customer?.email}</p>
+                    <p className="justify-self-end">{customer?.phoneNumber}</p>
+                    <div className="flex items-center gap-2 justify-self-end">
+                      <button
+                        onClick={() => dispatch({ type: "toggle-drawer" })}
+                        className="text-blue-600 transition-colors hover:text-blue-800 active:scale-95"
+                        title="Edit Customer"
+                      >
+                        <Edit />
+                        <span className="sr-only">Edit Customer Details</span>
+                      </button>
+                      <button
+                        className="text-red-600 transition-colors hover:text-red-800 active:scale-95"
+                        title="Delete Customer"
+                        onClick={() => dispatch({ type: "toggle-modal" })}
+                      >
+                        <Delete />
+                        <span className="sr-only">Delete Customer</span>
+                      </button>
+                      <Link href="/dashboard/invoices">
+                        <a className="flex rounded bg-main-black py-1 px-4 text-xs text-neutral active:scale-95">
+                          New Invoice
+                        </a>
+                      </Link>
+                      <Link href="/dashboard/customers/customer">
+                        <a className="ml-3 block rounded py-1 px-2 text-main-black transition-colors hover:bg-main-black hover:text-neutral">
+                          <ArrowRight />
+                          <span className="sr-only">More details</span>
+                        </a>
+                      </Link>
+                    </div>
+                  </li>
+                  {/* weird might find beta way to resolve this */}
+                  <Modal
+                    openModal={openModal}
+                    dispatch={dispatch}
+                    id={customer?._id}
+                  />
+                </>
+              ))
+            ) : (
+              <p className="mt-5 bg-gray-200 p-2 text-center text-other-black">
+                No Customers found, pls add one.
+              </p>
+            )}
           </ul>
         </div>
       </section>
