@@ -43,7 +43,7 @@ const getOneClient = async (req, res) => {
 }
 
 const addNewClient = async (req, res) => {
-	const { name, email, phoneNumber, organisation, organisationAddress } =
+	const { name, email, phoneNumber, organization, organizationAddress } =
 		req.body
 
 	// validate error with "express-validator"
@@ -53,23 +53,12 @@ const addNewClient = async (req, res) => {
 	}
 
 	try {
-		// check existing company name
-		const organisationExists = await Clients.findOne({ organisation })
-		if (organisationExists) {
-			throw Error('Organization already exists 😔')
-		}
-		// check existing client email address
-		const emailExists = await Clients.findOne({ email })
-		if (emailExists) {
-			throw Error('Organization already exists 😔')
-		}
-
 		const client = await Clients.create({
 			name,
 			email,
 			phoneNumber,
-			organisation,
-			organisationAddress,
+			organization,
+			organizationAddress,
 		})
 		res.status(200).json({
 			status: true,

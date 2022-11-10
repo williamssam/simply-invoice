@@ -1,13 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dispatch } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { Dispatch, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import * as z from "zod";
 import { Group } from "../assets/icons/Group";
 import { Mail } from "../assets/icons/Mail";
 import Map from "../assets/icons/Map";
 import { Phone } from "../assets/icons/Phone";
 import { User } from "../assets/icons/User";
-import { Action, CustomerType } from "../models/types";
+import type { Action, ApiError, CustomerType } from "../models/types";
+import { addNewCustomer } from "../utils/fetchCustomerData";
+import { Loader } from "./Loader";
 
 interface DrawerProps {
   openDrawer: boolean;
@@ -32,35 +37,67 @@ const schema = z.object({
       message: "Organization address must be at least 2 characters long",
     })
     .trim(),
-  emailAddress: z
+  email: z
     .string({ required_error: "Email Address is required" })
     .min(2, { message: "Email address must be at least 2 characters long" })
     .trim(),
   phoneNumber: z
     .string({ required_error: "Phone Number is required" })
-    .min(2, { message: "Phone number must be at least 2 characters long" })
+    .min(11, { message: "Phone number must be at least 11 characters long" })
+    .max(11, { message: "Phone number cannot be more than 11 characters long" })
     .trim(),
 });
 
 export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
+  const queryClient = useQueryClient();
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setError,
+    reset,
   } = useForm<CustomerType>({
     defaultValues: {
       name: "",
       organization: "",
       organizationAddress: "",
-      emailAddress: "",
+      email: "",
       phoneNumber: "",
     },
     resolver: zodResolver(schema),
   });
+  const { mutate, isLoading, isSuccess } = useMutation({
+    mutationFn: addNewCustomer,
+    onSuccess: () => {
+      dispatch({ type: "toggle-drawer" });
+      toast.success("Customer added successfully 🎉!");
+      return queryClient.invalidateQueries(["clients"]);
+    },
+    onError: (error: AxiosError<ApiError>) => {
+      toast.error("Error adding new customer 😭", {
+        position: "top-right",
+      });
+      let errors = error.response?.data;
+      if (!errors) return;
+      errors.errors?.map((err) => {
+        console.log("err", err);
+        setError(
+          err.param,
+          { type: "custom", message: err.msg },
+          { shouldFocus: true }
+        );
+      });
+    },
+  });
 
   const onSubmit = (data: CustomerType) => {
     console.log(data);
+    mutate({ ...data });
   };
+
+  useEffect(() => {
+    reset();
+  }, [isSuccess, reset]);
 
   return (
     <>
@@ -81,6 +118,7 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
             className="mt-6 flex flex-col gap-5"
             autoComplete="off"
             autoCorrect="off"
+            autoSave="off"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div>
@@ -113,7 +151,7 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
               <input
                 type="text"
                 className={`mt-2 w-full rounded bg-gray-200 py-3 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
-                  errors.name && "ring-2 ring-red-600"
+                  errors.organization && "ring-2 ring-red-600"
                 }`}
                 {...register("organization", { required: true })}
               />
@@ -133,7 +171,7 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
               <input
                 type="text"
                 className={`mt-2 w-full rounded bg-gray-200 py-3 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
-                  errors.name && "ring-2 ring-red-600"
+                  errors.organizationAddress && "ring-2 ring-red-600"
                 }`}
                 {...register("organizationAddress", { required: true })}
               />
@@ -153,13 +191,13 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
               <input
                 type="email"
                 className={`mt-2 w-full rounded bg-gray-200 py-3 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
-                  errors.name && "ring-2 ring-red-600"
+                  errors.email && "ring-2 ring-red-600"
                 }`}
-                {...register("emailAddress", { required: true })}
+                {...register("email", { required: true })}
               />
-              {errors.emailAddress && (
+              {errors.email && (
                 <p className="mt-1 text-[10px] font-bold text-red-700">
-                  {errors.emailAddress.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>
@@ -171,9 +209,9 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
                 <span>Phone Number</span>
               </label>
               <input
-                type="email"
+                type="number"
                 className={`mt-2 w-full rounded bg-gray-200 py-3 px-4 font-figtree font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-main-black ${
-                  errors.name && "ring-2 ring-red-600"
+                  errors.phoneNumber && "ring-2 ring-red-600"
                 }`}
                 {...register("phoneNumber", { required: true })}
               />
@@ -187,14 +225,15 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
             <div className="mt-3">
               <button
                 type="submit"
-                className="w-full rounded-md bg-black-btn py-3 px-10 text-neutral transition-colors hover:bg-black"
+                disabled={isLoading}
+                className="w-full rounded-md bg-black-btn py-3 px-10 text-neutral transition-colors hover:bg-black disabled:cursor-not-allowed disabled:bg-gray-300"
               >
-                Submit
+                {isLoading ? <Loader /> : "Add Post"}
               </button>
               <button
                 onClick={() => dispatch({ type: "toggle-drawer" })}
                 type="button"
-                className="mt-3 w-full rounded-md border border-black-btn py-[6px] px-10 text-center transition-transform active:scale-95"
+                className="mt-3 w-full rounded-md border border-black-btn py-[7px] px-10 text-center transition-transform active:scale-95"
               >
                 Close
               </button>

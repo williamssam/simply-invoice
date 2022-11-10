@@ -36,11 +36,9 @@ export const InvoiceSettings = () => {
           name="note"
           id=""
           rows={5}
-          // defaultValue=""
+          defaultValue="Thank you for your business!!"
           className="mt-3 w-full rounded bg-gray-200 p-2 font-figtree text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-main-black"
-        >
-          Thank you for your business!!
-        </textarea>
+        ></textarea>
       </div>
     </div>
   );

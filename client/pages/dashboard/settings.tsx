@@ -24,7 +24,7 @@ const schema = z.object({
       message: "Organization address must be at least 2 characters long",
     })
     .trim(),
-  emailAddress: z
+  email: z
     .string({ required_error: "Email Address is required" })
     .email({ message: "Email address is invalid" })
     .min(2, { message: "Email address must be at least 2 characters long" })
@@ -103,15 +103,15 @@ const Settings = () => {
                     type="email"
                     autoComplete="off"
                     className={`mt-1 w-full rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-900 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black ${
-                      errors.emailAddress && "ring-2 ring-red-600"
+                      errors.email && "ring-2 ring-red-600"
                     }`}
                     placeholder="Email Address"
-                    {...register("emailAddress", { required: true })}
+                    {...register("email", { required: true })}
                   />
                 </label>
-                {errors.emailAddress && (
+                {errors.email && (
                   <p className="mt-1 text-[10px] font-bold text-red-600">
-                    {errors.emailAddress.message}
+                    {errors.email.message}
                   </p>
                 )}
               </div>

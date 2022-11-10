@@ -16,11 +16,11 @@ const clientsModel = new Schema(
 			type: String,
 			required: true,
 		},
-		organisation: {
+		organization: {
 			type: String,
 			required: true,
 		},
-		organisationAddress: {
+		organizationAddress: {
 			type: String,
 			required: true,
 		},

@@ -1,13 +1,30 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dispatch } from "react";
+import { toast } from "react-toastify";
 import { Close } from "../assets/icons/Close";
 import { Action } from "../models/types";
+import { deleteCustomer } from "../utils/fetchCustomerData";
+import { Loader } from "./Loader";
 
 interface ModalProps {
   openModal: boolean;
   dispatch: Dispatch<Action>;
+  id: string;
 }
 
-export const Modal = ({ openModal, dispatch }: ModalProps) => {
+export const Modal = ({ openModal, dispatch, id: _id }: ModalProps) => {
+  const queryClient = useQueryClient();
+  const { mutate, isLoading } = useMutation({
+    mutationFn: deleteCustomer,
+    onSuccess: () => {
+      dispatch({ type: "toggle-modal" });
+      toast("Customer deleted succesfully!");
+      return queryClient.invalidateQueries(["clients"]);
+    },
+    onError: () => {
+      toast.error("Error deleting customer 🙃");
+    },
+  });
   return (
     <div
       className={`fixed top-0 right-0 left-0 z-50 h-screen w-screen items-center justify-center overflow-y-auto overflow-x-hidden bg-main-black/70 md:inset-0 md:h-full ${
@@ -46,10 +63,12 @@ export const Modal = ({ openModal, dispatch }: ModalProps) => {
 
           <div className="flex items-center justify-center gap-6">
             <button
+              disabled={isLoading}
+              // onClick={() => mutate({id: _id})}
               type="button"
-              className="rounded bg-red-700 py-[10px] px-8 text-neutral transition-colors hover:bg-red-800 active:scale-95"
+              className="rounded bg-red-700 py-[10px] px-8 text-neutral transition-colors hover:bg-red-800 active:scale-95 disabled:cursor-not-allowed disabled:bg-gray-300"
             >
-              Yes, I&apos;m sure
+              {isLoading ? <Loader /> : "Yes, I'm sure"}
             </button>
             <button
               onClick={() => dispatch({ type: "toggle-modal" })}
