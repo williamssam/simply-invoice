@@ -10,13 +10,14 @@ import { Mail } from "../assets/icons/Mail";
 import Map from "../assets/icons/Map";
 import { Phone } from "../assets/icons/Phone";
 import { User } from "../assets/icons/User";
-import type { Action, ApiError, CustomerType } from "../models/types";
+import type { ApiError, Customer, CustomerType } from "../models/types";
 import { addNewCustomer } from "../utils/fetchCustomerData";
 import { Loader } from "./Loader";
 
 interface DrawerProps {
   openDrawer: boolean;
-  dispatch: Dispatch<Action>;
+  setOpenDrawer: Dispatch<React.SetStateAction<boolean>>;
+  customer: Customer | null;
 }
 
 const schema = z.object({
@@ -48,13 +49,18 @@ const schema = z.object({
     .trim(),
 });
 
-export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
+export const Drawer = ({
+  openDrawer,
+  customer,
+  setOpenDrawer,
+}: DrawerProps) => {
   const queryClient = useQueryClient();
   const {
     register,
     formState: { errors },
     handleSubmit,
     setError,
+    setValue,
     reset,
   } = useForm<CustomerType>({
     defaultValues: {
@@ -66,10 +72,12 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
     },
     resolver: zodResolver(schema),
   });
-  const { mutate, isLoading, isSuccess } = useMutation({
+
+  // add customer
+  const { mutate, isLoading } = useMutation({
     mutationFn: addNewCustomer,
     onSuccess: () => {
-      dispatch({ type: "toggle-drawer" });
+      setOpenDrawer(!openDrawer);
       toast.success("Customer added successfully 🎉!");
       return queryClient.invalidateQueries(["clients"]);
     },
@@ -89,15 +97,11 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
       });
     },
   });
-
-  const onSubmit = (data: CustomerType) => {
-    console.log(data);
-    mutate({ ...data });
-  };
+  const onAddCustomer = (data: CustomerType) => mutate({ ...data });
 
   useEffect(() => {
     reset();
-  }, [isSuccess, reset]);
+  }, [reset]);
 
   return (
     <>
@@ -112,14 +116,17 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
             openDrawer ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <h3 className="text-xl font-bold">Add New Customer</h3>
+          <h3 className="text-xl font-bold">
+            Add New Customer
+            {/* {customer ? "Edit Customer" : ""} */}
+          </h3>
 
           <form
             className="mt-6 flex flex-col gap-5"
             autoComplete="off"
             autoCorrect="off"
             autoSave="off"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onAddCustomer)}
           >
             <div>
               <label className="flex items-center text-sm text-gray-600">
@@ -228,10 +235,10 @@ export const Drawer = ({ openDrawer, dispatch }: DrawerProps) => {
                 disabled={isLoading}
                 className="w-full rounded-md bg-black-btn py-3 px-10 text-neutral transition-colors hover:bg-black disabled:cursor-not-allowed disabled:bg-gray-300"
               >
-                {isLoading ? <Loader /> : "Add Post"}
+                {isLoading ? <Loader /> : "Add Customer"}
               </button>
               <button
-                onClick={() => dispatch({ type: "toggle-drawer" })}
+                onClick={() => setOpenDrawer(!openDrawer)}
                 type="button"
                 className="mt-3 w-full rounded-md border border-black-btn py-[7px] px-10 text-center transition-transform active:scale-95"
               >

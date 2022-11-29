@@ -47,115 +47,118 @@ export const Invoice = () => {
         </div>
       </header>
 
-      {/* Biller and Billed Details */}
-      <div className="mt-5 flex items-center justify-between gap-20">
-        <div className="flex-1">
-          <h3 className="text-sm font-bold uppercase text-gray-400">From:</h3>
+      <main>
+        <div className="mt-5 flex items-center justify-between gap-20">
+          <div className="flex-1">
+            <h3 className="text-sm font-bold uppercase text-gray-400">From:</h3>
 
-          {/* if editing */}
-          <div className="mt-2 flex flex-col gap-[5px] text-sm">
-            <input
-              type="text"
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Name"
-              {...register("sender-name", { required: true })}
-            />
-            <input
-              type="email"
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Email Address"
-              {...register("sender-email", { required: true })}
-            />
-            <input
-              type="text"
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Organization Name"
-              {...register("sender-organization-name", { required: true })}
-            />
-            <input
-              type="text"
-              className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Organization Address"
-              {...register("sender-organization-address", { required: true })}
-            />
+            {/* if editing */}
+            <div className="mt-2 flex flex-col gap-[5px] text-sm">
+              <input
+                type="text"
+                className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Name"
+                {...register("sender-name", { required: true })}
+              />
+              <input
+                type="email"
+                className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Email Address"
+                {...register("sender-email", { required: true })}
+              />
+              <input
+                type="text"
+                className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Organization Name"
+                {...register("sender-organization-name", { required: true })}
+              />
+              <input
+                type="text"
+                className="rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Organization Address"
+                {...register("sender-organization-address", { required: true })}
+              />
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <h3 className="text-right text-sm font-bold uppercase text-gray-400">
+              Billed To:
+            </h3>
+
+            <div className="mt-2 flex flex-col gap-[5px] text-sm">
+              <input
+                type="text"
+                disabled
+                className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Name"
+                {...register("receiver-name", { required: true })}
+              />
+              <input
+                type="email"
+                disabled
+                className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Email Address"
+                {...register("receiver-email", { required: true })}
+              />
+              <input
+                type="text"
+                disabled
+                className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Organization Name"
+                {...register("receiver-organization-name", { required: true })}
+              />
+              <input
+                type="text"
+                disabled
+                className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
+                placeholder="Organization Address"
+                {...register("receiver-organization-address", {
+                  required: true,
+                })}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex-1">
-          <h3 className="text-right text-sm font-bold uppercase text-gray-400">
-            Billed To:
-          </h3>
+        <div>
+          <header className="mt-8 flex items-center gap-4 border-y-2 border-y-gray-300 py-2 text-sm font-bold text-gray-600">
+            <h4 className="flex-1">Description</h4>
+            <h4 className="w-28 px-3 text-center">Rate</h4>
+            <h4 className="w-20 px-3 text-center">Qty</h4>
+            <h4 className="w-20 px-3 text-center">Total</h4>
+            {/* <h4 className="w-20 px-3 text-center">Actions</h4> */}
+          </header>
 
-          <div className="mt-2 flex flex-col gap-[5px] text-sm">
-            <input
-              type="text"
-              disabled
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Name"
-              {...register("receiver-name", { required: true })}
-            />
-            <input
-              type="email"
-              disabled
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Email Address"
-              {...register("receiver-email", { required: true })}
-            />
-            <input
-              type="text"
-              disabled
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Organization Name"
-              {...register("receiver-organization-name", { required: true })}
-            />
-            <input
-              type="text"
-              disabled
-              className="rounded bg-gray-200 py-2 px-4 text-right font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black"
-              placeholder="Organization Address"
-              {...register("receiver-organization-address", { required: true })}
-            />
-          </div>
+          <ul className="mt-3 flex flex-col gap-2">
+            <li className="flex items-center gap-4">
+              <input
+                type="text"
+                autoComplete="off"
+                // disabled
+                className="flex-1 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+                placeholder="Description"
+                {...register("description", { required: true })}
+              />
+              <input
+                type="number"
+                autoComplete="off"
+                className="w-28 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+                placeholder="Rate"
+                {...register("rate", { required: true })}
+              />
+              <input
+                type="number"
+                autoComplete="off"
+                className="w-20 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
+                placeholder="Qty"
+                {...register("qty", { required: true })}
+              />
+              <p className="font-bold">600,000</p>
+            </li>
+          </ul>
         </div>
-      </div>
-
-      <div>
-        <header className="mt-8 flex items-center gap-4 border-y-2 border-y-gray-300 py-2 text-sm font-bold text-gray-600">
-          <h4 className="flex-1">Description</h4>
-          <h4 className="w-28 px-3 text-center">Rate</h4>
-          <h4 className="w-20 px-3 text-center">Qty</h4>
-          <h4 className="w-20 px-3 text-center">Total</h4>
-          {/* <h4 className="w-20 px-3 text-center">Actions</h4> */}
-        </header>
-
-        <ul className="mt-3 flex flex-col gap-2">
-          <li className="flex items-center gap-4">
-            <input
-              type="text"
-              autoComplete="off"
-              // disabled
-              className="flex-1 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
-              placeholder="Description"
-              {...register("description", { required: true })}
-            />
-            <input
-              type="number"
-              autoComplete="off"
-              className="w-28 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
-              placeholder="Rate"
-              {...register("rate", { required: true })}
-            />
-            <input
-              type="number"
-              autoComplete="off"
-              className="w-20 rounded bg-gray-200 py-2 px-4 font-figtree font-bold text-gray-700 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-main-black disabled:bg-transparent disabled:py-0 disabled:px-0"
-              placeholder="Qty"
-              {...register("qty", { required: true })}
-            />
-            <p className="font-bold">600,000</p>
-          </li>
-        </ul>
-      </div>
+      </main>
 
       <footer className="mt-10 flex items-start justify-between text-sm">
         <button
@@ -180,7 +183,7 @@ export const Invoice = () => {
                     discount: !taxDiscount.discount,
                   })
                 }
-                className="text-xs font-bold text-blue-700"
+                className="px-2 py-1 text-xs font-bold text-blue-700 transition-all hover:bg-blue-200 active:scale-95"
               >
                 Add discount
               </button>
@@ -229,7 +232,7 @@ export const Invoice = () => {
 
       <button
         onClick={() => reset()}
-        className="text-xs font-bold text-red-600 active:scale-95"
+        className="py-1 px-2 text-xs font-bold text-red-600 transition-all hover:bg-red-200 active:scale-95"
       >
         Clear form
       </button>

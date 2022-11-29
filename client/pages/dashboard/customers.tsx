@@ -1,43 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import Head from "next/head";
 import Link from "next/link";
-import { ReactElement, useReducer } from "react";
+import { ReactElement, useState } from "react";
+import { toast } from "react-toastify";
 import { ArrowRight } from "../../assets/icons/ArrowRight";
 import Delete from "../../assets/icons/Delete";
 import Edit from "../../assets/icons/Edit";
 import { UserAdd } from "../../assets/icons/UserAdd";
 import { DashboardLayout } from "../../components/DashboardLayout";
 import { Drawer } from "../../components/Drawer";
-import { Modal } from "../../components/Modal";
-import { Action, initialStateType } from "../../models/types";
-import { fetchCustomers } from "../../utils/fetchCustomerData";
+import { ConfirmModal } from "../../components/modals/ConfirmModal";
+import { Modal } from "../../components/modals/Modal";
+import { Customer } from "../../models/types";
+// import { Modal } from "../../components/Modal";
+import { deleteCustomer, fetchCustomers } from "../../utils/fetchCustomerData";
 import { NextPageWithLayout } from "../_app";
 
-const initialState: initialStateType = {
-  openDrawer: false,
-  openModal: false,
-};
-
-const reducer = (state: initialStateType, action: Action) => {
-  switch (action.type) {
-    case "toggle-drawer":
-      return {
-        openDrawer: !state.openDrawer,
-        openModal: false,
-      };
-    case "toggle-modal":
-      return {
-        openModal: !state.openModal,
-        openDrawer: false,
-      };
-  }
-};
-
 const Customers: NextPageWithLayout = () => {
-  const [{ openDrawer, openModal }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [customer, setCustomer] = useState<Customer | null>(null);
+
+  // control modal
+  const [isOpen, setIsOpen] = useState(false);
+  const closeModal = () => setIsOpen(false);
+  const openModal = () => setIsOpen(true);
 
   // add error message
   const {
@@ -47,10 +34,80 @@ const Customers: NextPageWithLayout = () => {
     isLoading,
   } = useQuery(["clients"], fetchCustomers);
 
-  // TODO: check if user has internet connection and show a toast
-  // TODO: check if error exists and show a toast
+  // delete Customer mutation
+  const queryClient = useQueryClient();
+  const { mutate, isLoading: loading } = useMutation({
+    mutationFn: deleteCustomer,
+    onSuccess: () => {
+      closeModal();
+      toast.success("Customer deleted succesfully!");
+      return queryClient.invalidateQueries(["clients"]);
+    },
+    onError: () => {
+      toast.error("Error deleting customer 🙃");
+    },
+  });
 
-  console.log("customers", customers);
+  const displayTable = () => {
+    if (!isLoading && !isError) {
+      return customers!?.data.length > 0 ? (
+        customers?.data.map((customer) => (
+          <li key={customer?._id}>
+            <div className="relative grid grid-cols-5 gap-2 rounded bg-neutral py-2 px-6 text-other-black">
+              <h4>{customer?.name}</h4>
+              <p>{customer?.organization}</p>
+              <p>{customer?.email}</p>
+              <p className="justify-self-end">{customer?.phoneNumber}</p>
+              <div className="flex items-center gap-2 justify-self-end">
+                <button
+                  onClick={() => {
+                    setOpenDrawer(!openDrawer);
+                    setCustomer(customer);
+                  }}
+                  className="text-blue-600 transition-colors hover:text-blue-800 active:scale-95"
+                  title="Edit Customer"
+                >
+                  <Edit />
+                  <span className="sr-only">Edit Customer Details</span>
+                </button>
+                <button
+                  className="text-red-600 transition-colors hover:text-red-800 active:scale-95"
+                  title="Delete Customer"
+                  onClick={() => openModal()}
+                >
+                  <Delete />
+                  <span className="sr-only">Delete Customer</span>
+                </button>
+                <Link href="/dashboard/invoices">
+                  <a className="flex rounded bg-main-black py-1 px-4 text-xs text-neutral active:scale-95">
+                    New Invoice
+                  </a>
+                </Link>
+                <Link href="/dashboard/customers/customer">
+                  <a className="ml-3 block rounded py-1 px-2 text-main-black transition-colors hover:bg-main-black hover:text-neutral">
+                    <ArrowRight />
+                    <span className="sr-only">More details</span>
+                  </a>
+                </Link>
+              </div>
+            </div>
+            {/* weird might find beta way to resolve this */}
+            <Modal isOpen={isOpen} closeModal={closeModal}>
+              <ConfirmModal
+                onClose={closeModal}
+                isLoading={loading}
+                onAccept={() => mutate({ id: customer?._id })}
+              />
+            </Modal>
+          </li>
+        ))
+      ) : (
+        <li className="mt-5 bg-gray-200 p-2 text-center text-other-black">
+          No Customers found, pls add one.
+        </li>
+      );
+    }
+  };
 
   return (
     <>
@@ -75,7 +132,7 @@ const Customers: NextPageWithLayout = () => {
           </div>
 
           <button
-            onClick={() => dispatch({ type: "toggle-drawer" })}
+            onClick={() => setOpenDrawer(!openDrawer)}
             className="flex items-center gap-2 rounded bg-black-btn py-2 px-6 text-xs	text-neutral transition-colors hover:bg-black active:scale-95"
           >
             <UserAdd />
@@ -94,65 +151,21 @@ const Customers: NextPageWithLayout = () => {
 
           <ul className="mt-2 flex flex-col gap-3">
             {isLoading && <li>Loading....</li>}
-            {customers!?.data.length > 0 ? (
-              customers?.data.map((customer) => (
-                <>
-                  <li
-                    className="relative grid grid-cols-5 gap-2 rounded bg-neutral py-2 px-6 text-other-black"
-                    key={customer?._id}
-                  >
-                    <h4>{customer?.name}</h4>
-                    <p>{customer?.organization}</p>
-                    <p>{customer?.email}</p>
-                    <p className="justify-self-end">{customer?.phoneNumber}</p>
-                    <div className="flex items-center gap-2 justify-self-end">
-                      <button
-                        onClick={() => dispatch({ type: "toggle-drawer" })}
-                        className="text-blue-600 transition-colors hover:text-blue-800 active:scale-95"
-                        title="Edit Customer"
-                      >
-                        <Edit />
-                        <span className="sr-only">Edit Customer Details</span>
-                      </button>
-                      <button
-                        className="text-red-600 transition-colors hover:text-red-800 active:scale-95"
-                        title="Delete Customer"
-                        onClick={() => dispatch({ type: "toggle-modal" })}
-                      >
-                        <Delete />
-                        <span className="sr-only">Delete Customer</span>
-                      </button>
-                      <Link href="/dashboard/invoices">
-                        <a className="flex rounded bg-main-black py-1 px-4 text-xs text-neutral active:scale-95">
-                          New Invoice
-                        </a>
-                      </Link>
-                      <Link href="/dashboard/customers/customer">
-                        <a className="ml-3 block rounded py-1 px-2 text-main-black transition-colors hover:bg-main-black hover:text-neutral">
-                          <ArrowRight />
-                          <span className="sr-only">More details</span>
-                        </a>
-                      </Link>
-                    </div>
-                  </li>
-                  {/* weird might find beta way to resolve this */}
-                  <Modal
-                    openModal={openModal}
-                    dispatch={dispatch}
-                    id={customer?._id}
-                  />
-                </>
-              ))
-            ) : (
-              <p className="mt-5 bg-gray-200 p-2 text-center text-other-black">
-                No Customers found, pls add one.
-              </p>
+            {isError && (
+              <li className="mt-5 bg-gray-200 p-2 text-center text-other-black">
+                {error instanceof AxiosError && error.message}
+              </li>
             )}
+            {displayTable()}
           </ul>
         </div>
       </section>
 
-      <Drawer openDrawer={openDrawer} dispatch={dispatch} />
+      <Drawer
+        openDrawer={openDrawer}
+        customer={customer}
+        setOpenDrawer={setOpenDrawer}
+      />
     </>
   );
 };

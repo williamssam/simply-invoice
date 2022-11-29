@@ -18,6 +18,14 @@ export const addNewCustomer = async (customer: CustomerType) => {
   return resp?.data;
 };
 
+export const editCustomer = async (customer: CustomerType, id: string) => {
+  const resp: AxiosResponse<Customers> = await instance.put(
+    `clients/${id}`,
+    customer
+  );
+  return resp?.data;
+};
+
 export const deleteCustomer = async ({ id }: { id: string }) => {
   const resp = await instance.delete("clients", {
     data: {

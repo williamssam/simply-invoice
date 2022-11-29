@@ -1,4 +1,10 @@
-export const RecentInvoices = () => {
+import { AllInvoice } from "../models/types";
+
+interface RecentInvoicesProps {
+  data: AllInvoice;
+}
+
+export const RecentInvoices = ({ data }: RecentInvoicesProps) => {
   return (
     <div className="mt-10">
       <header className="grid grid-cols-5 py-1 px-6">
@@ -10,15 +16,20 @@ export const RecentInvoices = () => {
       </header>
 
       <ul className="mt-3 flex flex-col gap-3">
-        <li className="grid grid-cols-5 items-center rounded bg-neutral py-2 px-6">
-          <p>Inv-2005</p>
-          <p>3 Jul, 2022</p>
-          <p>CodeandWilliams</p>
-          <p>N150,000</p>
-          <p className="w-max rounded bg-purple-200 px-2 py-1 text-sm font-bold text-purple-700">
-            Sent
-          </p>
-        </li>
+        {data?.data?.map((invoice) => (
+          <li
+            className="grid grid-cols-5 items-center rounded bg-neutral py-2 px-6"
+            key={invoice._id}
+          >
+            <p>{invoice?.invoiceNo}</p>
+            <p>3 Jul, 2022</p>
+            <p>CodeandWilliams</p>
+            <p>N150,000</p>
+            <p className="w-max rounded bg-purple-200 px-2 py-1 text-sm font-bold text-purple-700">
+              Sent
+            </p>
+          </li>
+        ))}
         <li className="grid grid-cols-5 items-center rounded bg-neutral py-2 px-6">
           <p>Inv-2005</p>
           <p>3 Jul, 2022</p>

@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         draggable
         pauseOnHover
         role="alert"
-        theme="dark"
+        // theme="dark"
       />
     </QueryClientProvider>
   );

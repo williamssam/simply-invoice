@@ -1,12 +1,3 @@
-export interface initialStateType {
-  openDrawer: boolean;
-  openModal: boolean;
-}
-
-export interface Action {
-  type: "toggle-drawer" | "toggle-modal";
-}
-
 export interface CustomerType {
   name: string;
   organization: string;
@@ -25,6 +16,10 @@ export interface Customers {
   data: Customer[];
 }
 
+export interface AllInvoice {
+  data: Invoices[];
+}
+
 export interface ApiError {
   errors: {
     location: string;
@@ -38,4 +33,27 @@ export interface ApiError {
       | "phoneNumber";
     value: string;
   }[];
+}
+
+export interface Invoices {
+  _id: string;
+  invoiceNo: string;
+  issuedDate: string;
+  dueDate: string;
+  totalAmount: number;
+  subtotalAmount?: number;
+  discount: number;
+  project: string;
+  clientId: string;
+  note: string;
+  status: "paid" | "draft" | "pending" | "sent";
+  invoiceItems: InvoiceItem[];
+}
+
+interface InvoiceItem {
+  amount: number;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  _id: string;
 }
